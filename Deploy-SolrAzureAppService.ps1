@@ -58,21 +58,9 @@ $xml.DocumentElement.AppendChild($field)
 $xml.Save($path)
 
 $sitecoreCores = @(
-	"sitecore_analytics_index", 
     "sitecore_core_index", 
-    "sitecore_fxm_master_index", 
-	"sitecore_fxm_web_index", 
-	"sitecore_list_index", 
-    "sitecore_marketing_asset_index_master", 
-    "sitecore_marketing_asset_index_web", 
-	"sitecore_marketingdefinitions_master", 
-	"sitecore_marketingdefinitions_web", 
     "sitecore_master_index", 
-	"sitecore_suggested_test_index", 
-	"sitecore_testing_index", 
-	"sitecore_web_index", 
-    "social_messages_master", 
-	"social_messages_web"
+    "sitecore_web_index"
 )
 
 foreach ($coreName in $sitecoreCores) {
@@ -82,25 +70,4 @@ foreach ($coreName in $sitecoreCores) {
 	xcopy "..\wwwroot\server\solr\configsets\sitecore\conf\*" "..\wwwroot\server\solr\$coreName\conf\*" /S /Y
 	New-Item "..\wwwroot\server\solr\$coreName\core.properties"
 	Set-Content "..\wwwroot\server\solr\$coreName\core.properties" "name=$coreName`r`nupdate.autoCreateFields=false`r`ndataDir=data"
-}
-
-$xdbCores = @(
-	"xdb", 
-    "xdb_rebuild"
-)
-
-foreach ($coreName in $xdbCores) {
-	Write-Output "Creating $coreName index"
-	New-Item "..\wwwroot\server\solr\" -Name "$coreName" -ItemType "directory"
-	New-Item "..\wwwroot\server\solr\$coreName" -Name "data" -ItemType "directory"
-
-	if($usingDefault){
-		xcopy "..\wwwroot\server\solr\configsets\_default\conf\*" "..\wwwroot\server\solr\$coreName\conf\*" /S /Y
-	}
-	else{
-		xcopy "..\wwwroot\server\solr\configsets\basic_configs\conf\*" "..\wwwroot\server\solr\$coreName\conf\*" /S /Y
-	}
-
-	New-Item "..\wwwroot\server\solr\$coreName\core.properties"
-	Set-Content "..\wwwroot\server\solr\$coreName\core.properties" "name=$coreName`r`ndataDir=data"
 }
